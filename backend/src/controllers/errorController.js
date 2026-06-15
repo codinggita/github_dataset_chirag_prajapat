@@ -6,7 +6,16 @@ const handleCastErrorDB = err => {
 };
 
 const handleDuplicateFieldsDB = err => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  // Try to get value from keyValue (standard in Mongoose/MongoDB driver)
+  let value = '';
+  if (err.keyValue) {
+    value = Object.values(err.keyValue).join(', ');
+  } else {
+    // Fallback to match in message or errmsg
+    const targetString = err.message || err.errmsg || '';
+    const match = targetString.match(/(["'])(\\?.)*?\1/);
+    value = match ? match[0] : 'unknown';
+  }
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
