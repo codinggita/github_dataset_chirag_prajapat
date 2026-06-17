@@ -1,0 +1,8 @@
+{
+  "name": "github-dataset-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm install --prefix frontend && npm --prefix frontend run build"
+  }
+}
